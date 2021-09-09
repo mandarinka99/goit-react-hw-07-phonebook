@@ -1,29 +1,21 @@
 import s from "./ContactsList.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import {getContactsSelector, getFilterSelector} from '../../redux/contacts/contacts-selectors';
-import {getContacts, deleteContact} from '../../redux/contacts/contacts-operation';
+import { getFilterContactsSelector } from '../../redux/contacts/contacts-selectors';
+import {getContacts, deleteContact } from '../../redux/contacts/contacts-operation';
 import { useEffect } from "react";
 
 const ContactsList = () => {
-  const contacts = useSelector(getContactsSelector);
-  const filter = useSelector(getFilterSelector);
+  const filteredContacts = useSelector(getFilterContactsSelector)
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getContacts())
   }, [dispatch]);
-
-  let newFilter = contacts;
-  if (filter) {
-    newFilter = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  }
   
   return (
     <div>
       <ul className={s.list}>
-        {newFilter.map((contact) => (
+        {filteredContacts.map((contact) => (
           <li className={s.item} key={contact.id}>
             {contact.name} {contact.number}{" "}
             <button
